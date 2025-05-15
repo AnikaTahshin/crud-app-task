@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import api from ".";
 import { setTokens } from "../services/auth.service";
+import type { ProductData, ProductResponse } from "../types/product.types";
 
 interface LoginCredentials {
   email: string;
@@ -45,4 +46,11 @@ export const logout = () => {
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
   window.location.href = "/login";
+};
+
+export const getProducts = async (offset: number, limit: number) => {
+  const response = await api.get<ProductResponse>(
+    `/v1/product/?offset=${offset}&limit=${limit}`
+  );
+  return response.data;
 };

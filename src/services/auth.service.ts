@@ -15,7 +15,6 @@ export const clearTokens = () => {
   localStorage.removeItem("refresh_token");
 };
 
-// Add this function to debug token storage
 export const checkTokens = () => {
   const access = localStorage.getItem("access_token");
   const refresh = localStorage.getItem("refresh_token");
