@@ -45,7 +45,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-between mt-4 gap-4">
+    <div className="flex items-center justify-center mt-4 gap-4">
       <select
         value={limit}
         onChange={handleLimitChange}
