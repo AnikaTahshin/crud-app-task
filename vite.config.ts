@@ -11,11 +11,10 @@ export default defineConfig({
         target: "https://api.sandbox.payinpos.com",
         changeOrigin: true,
         secure: false,
+        
         configure: (proxy, _options) => {
-          proxy.on("error", (err, _req, _res) => {
-            console.log("proxy error", err);
-          });
-          proxy.on("proxyReq", (proxyReq, req, _res) => {
+          proxy.on("error", (_req, _res) => {});
+          proxy.on("proxyReq", (proxyReq, _res) => {
             proxyReq.setHeader(
               "X-CSRFTOKEN",
               "3Nt0AOXsQhoReRYAP8903hNNcoLJPdOV8TuzWPhOklNsp3nBtXoXSYWQfYiBgEQM"

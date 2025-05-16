@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { login } from "../api/auth";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,22 +15,17 @@ const Login = () => {
         password: password,
       });
 
-      console.log("Login response:", response);
-
       if (
         response.data.data?.access_token &&
-        response?.data?.data?.refresh_token
+        response.data.data?.refresh_token
       ) {
+        toast.success("Login successful!");
         window.location.href = "/product";
       } else {
-        console.error("Invalid token data received:", response.data);
+        toast.error("Invalid login response");
       }
     } catch (error: any) {
-      console.error("Login failed:", {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message,
-      });
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -87,7 +83,7 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 cursor-pointer"
               >
                 Sign in
               </button>
