@@ -24,11 +24,11 @@ const Pagination = ({
   ) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
-    setPage(1); // Reset to first page when changing items per page
+    setPage(1); 
   };
 
   return (
-    <div className="flex items-center justify-between mt-4 gap-4">
+    <div className="flex items-center justify-between m-4 gap-4">
       <select
         value={pageSize}
         onChange={handlePageSizeChange}

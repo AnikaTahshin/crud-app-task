@@ -17,17 +17,9 @@ export interface ProductData {
 }
 
 export interface ProductResponse {
-  code: number;
-  message: string | null;
-  status: string;
   data: {
-    total_items: number;
-    next: string | null;
-    previous: string | null;
-    total_pages: number;
-    active_page: number;
-    page_size: number;
     results: ProductData[];
+    total_items: number;
+    // ...other pagination fields
   };
-  errors: null | any;
 }
