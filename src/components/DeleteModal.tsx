@@ -2,14 +2,13 @@ interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  productName: string;
+
 }
 
 const DeleteModal = ({
   isOpen,
   onClose,
   onConfirm,
-  productName,
 }: DeleteModalProps) => {
   if (!isOpen) return null;
 
@@ -20,19 +19,19 @@ const DeleteModal = ({
           Delete Product
         </h3>
         <p className="text-gray-500 dark:text-gray-400 mb-6">
-          Are you sure you want to delete "{productName}"? This action cannot be
+          Are you sure you want to delete ? This action cannot be
           undone.
         </p>
         <div className="flex justify-end gap-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+            className="px-4 py-2 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="px-4 py-2 cursor-pointer bg-red-600 text-white rounded-lg hover:bg-red-700"
           >
             Delete
           </button>

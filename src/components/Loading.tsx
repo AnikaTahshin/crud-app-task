@@ -14,11 +14,11 @@ const CustomLoading: React.FC<LoaderProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-4">
       <div
-        className="animate-spin rounded-full border-4 border-t-transparent"
+        className="animate-spin rounded-full border-2 border-t-transparent"
         style={{
           width: size,
           height: size,
-          borderColor: `${color}`,
+          borderColor: `${color} transparent ${color} ${color}`,
         }}
       ></div>
       {message && <p className="mt-2 text-sm text-gray-600">{message}</p>}

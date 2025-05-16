@@ -60,14 +60,14 @@ export const getProducts = async (page: number, page_size: number) => {
 };
 
 // delete product api
-export const deleteProduct = async (id: number) => {
+export const deleteProduct = async (slug: string) => {
   try {
     const token = localStorage.getItem("access_token");
     if (!token) {
       throw new Error("Authentication required");
     }
 
-    const response = await api.delete(`/v1/product/${id}/`, {
+    const response = await api.delete(`/v1/product/${slug}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -75,12 +75,17 @@ export const deleteProduct = async (id: number) => {
     });
 
     if (response.status === 204 || response.status === 200) {
-      return { success: true };
+      return { success: true, message: "Product deleted successfully" };
     }
 
-    throw new Error("Failed to delete product");
+    throw new Error(response.data?.message || "Failed to delete product");
   } catch (error: any) {
-    console.error("Delete error:", error.response || error);
+    if (error.response?.status === 404) {
+      throw new Error("Product not found");
+    }
+    if (error.response?.status === 401) {
+      throw new Error("Authentication required");
+    }
     throw new Error(
       error.response?.data?.message || "Failed to delete product"
     );

@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import React from 'react'
-
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import SearchInput from "./SearchInput";
 import { deleteProduct, getProducts, logout } from "../api/auth";
 import type { ProductData } from "../types/product.types";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import CustomLoading from "./Loading";
+import "react-toastify/dist/ReactToastify.css";
 
 const Table = () => {
-  // Add deletingId state to track which product is being deleted
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchProduct, setSearchProduct] = useState("");
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -18,9 +16,8 @@ const Table = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true); // Add this new state
+  const [initialLoading, setInitialLoading] = useState(true);
 
-  // const [error, setError] = useState<string | null>(null);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
@@ -42,21 +39,18 @@ const Table = () => {
     fetchProducts();
   }, [page, pageSize]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (slug: string | null) => {
+    if (!slug) return;
     try {
-      setDeletingId(id.toString());
-      await deleteProduct(id);
-
-      // Remove deleted product from state
-      const updatedProducts = products.filter((p) => p.id !== id);
+      setDeletingId(slug);
+      await deleteProduct(slug);
+      const updatedProducts = products.filter((p) => p.slug !== slug);
       const updatedFilteredProducts = filteredProducts.filter(
-        (p) => p.id !== id
+        (p) => p.slug !== slug
       );
-
       setProducts(updatedProducts);
       setFilteredProducts(updatedFilteredProducts);
       setTotalItems((prev) => prev - 1);
-
       toast.success("Product deleted successfully");
     } catch (error: any) {
       toast.error(error.message || "Failed to delete product");
@@ -73,7 +67,6 @@ const Table = () => {
         setFilteredProducts(products);
         return;
       }
-
       const term = searchTerm.toLowerCase();
       const filtered = products.filter(
         (product) =>
@@ -81,7 +74,6 @@ const Table = () => {
           product.product_brand.toLowerCase().includes(term) ||
           product.product_category.toLowerCase().includes(term)
       );
-
       setFilteredProducts(filtered);
     } finally {
       setSearchLoading(false);
@@ -90,7 +82,19 @@ const Table = () => {
 
   return (
     <>
-      {initialLoading ? ( // Use initialLoading instead of loading
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      {initialLoading ? (
         <CustomLoading />
       ) : (
         <div className="m-8 flex items-center justify-center flex-col">
@@ -99,15 +103,18 @@ const Table = () => {
             setSearchProduct={setSearchProduct}
             onSearch={handleSearch}
           />
-
           <button
             type="button"
             className=" text-white cursor-pointer absolute end-2.5 top-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={logout}
+            onClick={() => {
+              toast.success("Logged out successfully!");
+              setTimeout(() => {
+                logout();
+              }, 1000);
+            }}
           >
             Log out
           </button>
-
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             {searchLoading ? (
               <div className="flex items-center justify-center p-8">
@@ -115,7 +122,7 @@ const Table = () => {
               </div>
             ) : filteredProducts?.length > 0 ? (
               <>
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                       <th scope="col" className="px-6 py-3">
@@ -184,15 +191,15 @@ const Table = () => {
 
                         <td className="px-6 py-4">
                           <button
-                            onClick={() => handleDelete(product.id)}
-                            disabled={deletingId === product.id.toString()}
+                            onClick={() => product?.slug && handleDelete(product?.slug)}
+                            disabled={!product?.slug || deletingId === product?.slug}
                             className={`font-medium text-red-600 dark:text-red-500 hover:underline ${
-                              deletingId === product.id.toString()
+                              !product?.slug || deletingId === product?.slug
                                 ? "opacity-50 cursor-not-allowed"
                                 : "cursor-pointer"
                             }`}
                           >
-                            {deletingId === product.id.toString()
+                            {!product?.slug || deletingId === product?.slug
                               ? "Deleting..."
                               : "Delete"}
                           </button>
@@ -210,9 +217,26 @@ const Table = () => {
                 />
               </>
             ) : (
-              <div className="flex items-center justify-center p-8">
-                <p className="text-gray-500 dark:text-gray-400">
-                  No products found
+              <div className="flex flex-col items-center justify-center p-12">
+                <svg
+                  className="w-16 h-16 text-gray-400 mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <p className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
+                  No Products Found
+                </p>
+                <p className="text-sm text-gray-400 dark:text-gray-500">
+                  Try adjusting your search or filter to find what you're looking for
                 </p>
               </div>
             )}
