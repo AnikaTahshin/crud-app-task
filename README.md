@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# CRUD App Task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React CRUD app with authentication, protected routes, product management, search, pagination, and beautiful UI/UX.
 
-Currently, two official plugins are available:
+## Features
+- Login/logout with JWT authentication
+- Protected product listing page
+- Product search (by name, brand, category)
+- Pagination
+- Delete product with confirmation and toast
+- Loading spinners and toasts for feedback
+- 404 Not Found page for invalid routes
+- Responsive, clean design (TailwindCSS)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
+- React 19
+- TypeScript
+- React Router v7
+- Axios
+- React Toastify
+- TailwindCSS
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### 1. Clone the repo
+```bash
+git clone <repo-url>
+cd crud-app-task
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### 2. Install dependencies
+```bash
+npm install
 ```
+
+### 3. Start the dev server
+```bash
+npm run dev
+```
+
+App will be running at [http://localhost:5173](http://localhost:5173)
+
+## Usage
+- **Login:** Use your credentials to log in.
+- **Product Page:** View, search, and delete products. Only accessible when logged in.
+- **Logout:** Click the logout button (top right) to log out.
+- **404:** Any invalid route shows a friendly 404 page.
+
+## Project Structure
+```
+src/
+  components/      # React components (Table, Login, Pagination, etc)
+  api/             # API calls (auth, product)
+  types/           # TypeScript types
+  services/        # Auth token helpers
+  main.tsx         # App entrypoint
+```
+
+## Notes
+- API endpoints are expected to be available and CORS-enabled.
+- React 18+ StrictMode may cause double API calls in dev (not in production).
+- All UI feedback (loading, errors, success) is handled with toasts and spinners.
+
+## License
+MIT
